@@ -89,7 +89,9 @@ def is_valid(s):
 
     return True
 
-main()
+
+if __name__ == "__main__":
+	main()
 
 ```
 ---
@@ -124,7 +126,7 @@ def main():
     }
 
     fruit = input("Fruit: ").lower().strip()
-
+# Stores the value of the fruit key
     calories = fruits.get(fruit)
 # Error handling for unrecognized input from user
     if calories == None:
@@ -132,6 +134,7 @@ def main():
     else:
         print(f"Calories: {calories}")
 
-main()
+if __name__ == "__main__":
+	main()
 
 ```
