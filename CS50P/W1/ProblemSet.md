@@ -81,3 +81,26 @@ if __name__ == "__main__":
 ```
 ---
 # Meal Time
+
+```python
+def convert(time):
+
+    hours, minutes = map(int, time.split(':'))
+    time_float = hours + (minutes / 60.0)
+    
+    if time_float < 8:
+        print("breakfast time")
+    elif time_float > 8 and time_float < 18:
+        print("lunch time")
+    else:
+        print("dinner time")
+    return time_float
+
+def main():
+    meal_time = input("What time is it? ")
+    convert(meal_time)
+
+if __name__ == "__main__":
+    main()
+
+```
