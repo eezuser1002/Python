@@ -1,146 +1,101 @@
-# Test twttr
-
+# Lines
 ```python
-from twttr import shorten
+import sys
 
-def test_default():
-    assert shorten("applesauce") == "pplsc"
 
-def test_vowels_lowercase():
-    assert shorten("twitter") == "twttr"
+def counter(filename):
+    if not filename.endswith(".py"):
+        sys.exit("Not a Python file")
+    
+    lines = 0
+    with open(filename, "r") as file:
+        for line in file:
+            line = line.strip()
+            if line and not line.startswith("#"):
+                lines += 1
+    
+    print(lines)
 
-def test_vowels_uppercase():
-    assert shorten("TWITTER") == "TWTTR"
+def main():
+    if len(sys.argv) != 2:
+        sys.exit("Usage: python lines.py <file.py>")
+    counter(sys.argv[1])
 
-def test_numbers():
-    assert shorten("CS50") == "CS50"
+if __name__ == "__main__":
+    main()
+```
 
-def test_punctuation():
-    assert shorten("Hello, world!") == "Hll, wrld!"
+---
+#  Pizza
+```python
+import sys
+import csv
+from tabulate import tabulate
 
-def test_mixed_case():
-    assert shorten("PyThOn") == "PyThn"
+
+def main():
+    # Check for exactly one command-line argument
+    if len(sys.argv) < 2:
+        sys.exit("Too few command-line arguments")
+    if len(sys.argv) > 2:
+        sys.exit("Too many command-line arguments")
+
+    filename = sys.argv[1]
+
+    # Check if file ends with .csv
+    if not filename.endswith(".csv"):
+        sys.exit("Not a CSV file")
+
+    # Check if file exists
+    try:
+        with open(filename, "r") as file:
+            reader = csv.reader(file)
+            rows = list(reader)
+    except FileNotFoundError:
+        sys.exit("File does not exist")
+
+    # Display the table using tabulate with grid format
+    print(tabulate(rows[1:], headers=rows[0], tablefmt="grid"))
+
+
+if __name__ == "__main__":
+    main()
 
 ```
+
+
 ---
-
-# Test Fuel
-
+# Scourgify
 ```python
-import pytest
-from fuel import convert, gauge
+import sys
+import csv
 
 
-def test_convert():
-    assert convert("1/2") == 50
-    assert convert("1/4") == 25
-    assert convert("3/4") == 75
-    assert convert("99/100") == 99
+def main():
+    # CLI argument validation
+    if len(sys.argv) != 3:
+        sys.exit("Too few command-line arguments")
+    if not sys.argv[1].endswith(".csv") or not sys.argv[2].endswith(".csv"):
+        sys.exit("Not a CSV file")
 
 
-def test_convert_empty():
-    assert convert("0/100") == 0
-    assert convert("1/100") == 1
+
+    # Format before.csv to after.csv
+    with open(sys.argv[1]) as file:
+        reader = csv.DictReader(file)
+        students = []
+        for row in reader:
+            name = row["name"].split(", ")
+            students.append({"first": name[1], "last": name[0], "house": row["house"]})
+
+    with open(sys.argv[2], "w") as file:
+        writer = csv.DictWriter(file, fieldnames=["first", "last", "house"])
+        writer.writeheader()
+        for student in students:
+            writer.writerow(student)
 
 
-def test_convert_full():
-    assert convert("100/100") == 100
-    assert convert("99/100") == 99
-
-
-def test_convert_value_error():
-    with pytest.raises(ValueError):
-        convert("3/2")
-
-    with pytest.raises(ValueError):
-        convert("cat/dog")
-
-
-def test_convert_zero_division():
-    with pytest.raises(ZeroDivisionError):
-        convert("1/0")
-        
-def test_convert_negative():
-    with pytest.raises(ValueError):
-        convert("-1/2")
-
-    with pytest.raises(ValueError):
-        convert("1/-2")
-
-def test_gauge():
-    assert gauge(0) == "E"
-    assert gauge(1) == "E"
-    assert gauge(50) == "50%"
-    assert gauge(99) == "F"
-    assert gauge(100) == "F"
-
-```
----
-# Test Bank
-```python
-from bank import value
-
-
-def test_hello():
-    assert value("hello") == 0
-
-
-def test_hello_uppercase():
-    assert value("HELLO") == 0
-
-
-def test_hello_mixed_case():
-    assert value("HeLLo") == 0
-
-
-def test_h():
-    assert value("hi") == 20
-
-
-def test_h_uppercase():
-    assert value("HOW are you") == 20
-
-
-def test_else():
-    assert value("welp") == 100
-```
----
-# Test Plates
-```python
-from plates import is_valid
-
-# used ai help to come up with some tests
-def test_valid_plates():
-    assert is_valid("CS50") is True
-    assert is_valid("AAA222") is True
-    assert is_valid("HELLO") is True
-    assert is_valid("AB123") is True
-
-
-def test_length_rules():
-    assert is_valid("A") is False
-    assert is_valid("ABCDEFG") is False
-
-
-def test_first_two_letters():
-    assert is_valid("1ABC") is False
-    assert is_valid("A1BC") is False
-    assert is_valid("12") is False
-
-
-def test_alphanumeric_only():
-    assert is_valid("PI3.14") is False
-    assert is_valid("HELLO!") is False
-    assert is_valid("AA 22") is False
-
-
-def test_numbers_at_end_only():
-    assert is_valid("CS50P") is False
-    assert is_valid("AB12CD") is False
-
-
-def test_first_number_not_zero():
-    assert is_valid("CS05") is False
-    assert is_valid("AB012") is False
+if __name__ == "__main__":
+    main()
 
 ```
