@@ -99,3 +99,58 @@ if __name__ == "__main__":
     main()
 
 ```
+
+---
+# Shirt
+```python
+import sys
+from PIL import Image, ImageOps
+
+
+def main():
+
+    # Check for correct number of command-line arguments
+    if len(sys.argv) != 3:
+        sys.exit("Usage: python shirt.py input output")
+
+    input_file = sys.argv[1]
+    output_file = sys.argv[2]
+
+    # Valid extensions
+    valid_extensions = [".jpg", ".jpeg", ".png"]
+
+    # Check input extension
+    if not any(input_file.lower().endswith(ext) for ext in valid_extensions):
+        sys.exit("Invalid input")
+
+    # Check output extension
+    if not any(output_file.lower().endswith(ext) for ext in valid_extensions):
+        sys.exit("Invalid output")
+
+    # Check matching extensions
+    if input_file.split(".")[-1].lower() != output_file.split(".")[-1].lower():
+        sys.exit("Input and output have different extensions")
+
+    try:
+        # Open shirt image
+        with Image.open("shirt.png") as shirt:
+
+            # Open input image
+            with Image.open(input_file) as img:
+
+                # Resize and crop image to shirt size
+                fitted = ImageOps.fit(img, shirt.size)
+
+                # Overlay shirt
+                fitted.paste(shirt, shirt)
+
+                # Save output
+                fitted.save(output_file)
+
+    except FileNotFoundError:
+        sys.exit("Input does not exist")
+
+
+if __name__ == "__main__":
+    main()
+```
